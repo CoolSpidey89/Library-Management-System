@@ -1,0 +1,25 @@
+{% extends 'books/base.html' %}
+{% block content %}
+
+<h2>Welcome {{ student.name }}</h2>
+
+<a href="{% url 'student_logout' %}" class="btn btn-danger btn-sm">Logout</a>
+
+<table class="table mt-3">
+<tr>
+    <th>Book</th>
+    <th>Issue Date</th>
+    <th>Fine</th>
+</tr>
+
+{% for book in books %}
+<tr>
+    <td>{{ book.title }}</td>
+    <td>{{ book.issue_date }}</td>
+    <td>₹{{ book.fine }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

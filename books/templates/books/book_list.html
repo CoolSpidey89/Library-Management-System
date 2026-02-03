@@ -1,0 +1,80 @@
+{% extends 'books/base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>All Books</h2>
+    <a href="{% url 'add_book' %}" class="btn btn-primary">+ Add Book</a>
+</div>
+
+<form method="GET" class="mb-3 d-flex">
+    <input type="text" name="q" class="form-control me-2" placeholder="Search books...">
+    <button class="btn btn-dark">Search</button>
+</form>
+
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-4">
+        <div class="card-premium">
+            <span class="text-muted">Total Books</span>
+            <h1 class="fw-bold mt-2">{{ total_books }}</h1>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-premium">
+            <span class="text-muted">Issued Books</span>
+            <h1 class="fw-bold text-danger mt-2">{{ issued_books }}</h1>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-premium">
+            <span class="text-muted">Available Books</span>
+            <h1 class="fw-bold text-success mt-2">{{ available_books }}</h1>
+        </div>
+    </div>
+
+</div>
+
+<table class="table table-hover align-middle">
+<thead class="table-dark">
+<tr>
+    <th>Title</th>
+    <th>Author</th>
+    <th>ISBN</th>
+    <th>Status</th>
+    <th>Actions</th>
+</tr>
+</thead>
+<tbody>
+
+{% for book in books %}
+<tr>
+    <td>{{ book.title }}</td>
+    <td>{{ book.author }}</td>
+    <td>{{ book.isbn }}</td>
+    <td>
+        {% if book.is_issued %}
+            <span class="badge bg-danger">Issued</span>
+        {% else %}
+            <span class="badge bg-success">Available</span>
+        {% endif %}
+    </td>
+    <td>
+    {% if not book.is_issued %}
+        <a href="{% url 'issue_book' book.id %}" class="btn btn-primary btn-sm">Issue</a>
+    {% else %}
+        <a href="{% url 'toggle_issue' book.id %}" class="btn btn-warning btn-sm">Return</a>
+    {% endif %}
+
+    <a href="{% url 'delete_book' book.id %}" class="btn btn-danger btn-sm">Delete</a>
+</td>
+
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+{% endblock %}
