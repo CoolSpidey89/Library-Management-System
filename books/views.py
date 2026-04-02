@@ -41,6 +41,20 @@ def delete_book(request, id):
     book.delete()
     return redirect('book_list')
 
+def edit_book(request, id):
+    book = Book.objects.get(id=id)
+
+    if request.method == "POST":
+        book.title = request.POST['title']
+        book.author = request.POST['author']
+        book.isbn = request.POST['isbn']
+        book.category = request.POST['category']
+        book.published_date = request.POST['published_date']
+        book.save()
+        return redirect('book_list')
+
+    return render(request, 'books/edit_book.html', {'book': book})
+
 
 def toggle_issue(request, id):
     book = Book.objects.get(id=id)
