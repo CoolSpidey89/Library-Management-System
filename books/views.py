@@ -20,14 +20,10 @@ def issue_book(request, id):
     return render(request, 'books/issue_book.html', {'book': book, 'students': students})
 
 
-def book_list(request):
-    books = Book.objects.all()
-    return render(request, 'books/book_list.html', {'books': books})
-
 def add_book(request):
     if request.method == "POST":
         Book.objects.create(
-            title=request.POST['title'],
+            title=request.POST['title'], 
             author=request.POST['author'],
             isbn=request.POST['isbn'],
             category=request.POST['category'],
@@ -69,15 +65,6 @@ def book_list(request):
     else:
         books = Book.objects.all()
 
-    return render(request, 'books/book_list.html', {'books': books})
-
-def book_list(request):
-    query = request.GET.get('q')
-    if query:
-        books = Book.objects.filter(title__icontains=query) | Book.objects.filter(author__icontains=query)
-    else:
-        books = Book.objects.all()
-
     total_books = Book.objects.count()
     issued_books = Book.objects.filter(is_issued=True).count()
     available_books = Book.objects.filter(is_issued=False).count()
@@ -89,23 +76,7 @@ def book_list(request):
         'available_books': available_books
     })
 
-def student_portal(request):
-    student = None
-    books = None
-
-    if request.method == "POST":
-        roll = request.POST.get('roll')
-        student = Student.objects.filter(roll_number=roll).first()
-        if student:
-            books = Book.objects.filter(issued_to=student)
-
-    return render(request, 'books/student_portal.html', {
-        'student': student,
-        'books': books
-    })
-
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout 
 
 def student_login(request):
     if request.method == "POST":
